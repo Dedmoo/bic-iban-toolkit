@@ -37,3 +37,8 @@ curl -s -X POST http://localhost:8084/api/bic/validate \
 ## License
 
 [MIT](LICENSE)
+
+## Notes
+
+Educational demo for payment rails and onboarding checks.
+
