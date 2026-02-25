@@ -14,6 +14,20 @@ public class BicIbanService {
             "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES",
             "SE", "IS", "LI", "NO", "CH", "MC", "SM", "AD", "VA", "GB");
 
+    // ISO 13616 national length table (subset commonly used in demos).
+    private static final java.util.Map<String, Integer> COUNTRY_LENGTH = java.util.Map.ofEntries(
+            java.util.Map.entry("DE", 22),
+            java.util.Map.entry("TR", 26),
+            java.util.Map.entry("GB", 22),
+            java.util.Map.entry("FR", 27),
+            java.util.Map.entry("NL", 18),
+            java.util.Map.entry("ES", 24),
+            java.util.Map.entry("IT", 27),
+            java.util.Map.entry("CH", 21),
+            java.util.Map.entry("AT", 20),
+            java.util.Map.entry("BE", 16)
+    );
+
     public record IbanResult(String iban, boolean valid, String country, boolean sepa, String message) {}
     public record BicResult(String bic, boolean valid, String bankCode, String country, String location, String branch, String message) {}
 
@@ -29,6 +43,11 @@ public class BicIbanService {
             return new IbanResult(iban, false, null, false, "IBAN format is invalid.");
         }
         String country = iban.substring(0, 2);
+        Integer expectedLen = COUNTRY_LENGTH.get(country);
+        if (expectedLen != null && iban.length() != expectedLen) {
+            return new IbanResult(iban, false, country, SEPA_COUNTRIES.contains(country),
+                    "IBAN length for " + country + " must be " + expectedLen + ".");
+        }
         boolean mod97 = mod97Valid(iban);
         if (!mod97) {
             return new IbanResult(iban, false, country, SEPA_COUNTRIES.contains(country), "IBAN check digits failed mod-97.");
