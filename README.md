@@ -111,3 +111,5 @@ curl -s -X POST http://localhost:8084/api/bic/validate \
 ## License
 
 [MIT](LICENSE)
+
+<!-- docs: maintenance pass 2026-06-05 -->
