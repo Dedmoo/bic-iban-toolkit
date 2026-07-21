@@ -38,6 +38,52 @@ flowchart LR
 
 Invalid results return HTTP 400 with the same shape and a `message` explaining length or mod-97 failure.
 
+## Domain model
+
+Class-level view of the main types and how they relate (fields, operations and dependencies).
+
+```mermaid
+classDiagram
+    direction TB
+    class BicIbanController {
+        <<controller>>
+        -service: BicIbanService
+        +validateIban(request) IbanResult
+        +validateBic(request) BicResult
+    }
+    class BicIbanService {
+        <<service>>
+        +validateIban(value) IbanResult
+        +validateBic(value) BicResult
+    }
+    class ValidateRequest {
+        <<record>>
+        +value: String
+    }
+    class IbanResult {
+        <<record>>
+        +iban: String
+        +valid: boolean
+        +country: String
+        +sepa: boolean
+        +message: String
+    }
+    class BicResult {
+        <<record>>
+        +bic: String
+        +valid: boolean
+        +bankCode: String
+        +country: String
+        +location: String
+        +branch: String
+        +message: String
+    }
+    BicIbanController --> BicIbanService
+    BicIbanController ..> ValidateRequest
+    BicIbanService ..> IbanResult
+    BicIbanService ..> BicResult
+```
+
 ## Quick start
 
 ```bash
