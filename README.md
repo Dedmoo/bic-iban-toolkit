@@ -1,5 +1,7 @@
 # BIC / IBAN Toolkit
 
+[![CI](https://github.com/Dedmoo/BicIbanToolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/Dedmoo/BicIbanToolkit/actions/workflows/ci.yml)
+
 Spring Boot toolkit for validating **ISO 13616 IBAN** (national length + mod-97) and **ISO 9362 BIC** (BIC8/BIC11), plus a SEPA country flag for the IBAN country code.
 
 Inspired by the problem space of libraries such as [jbanking](https://github.com/marcwrobel/jbanking) (Apache-2.0). This repository is an independent educational implementation under MIT.
