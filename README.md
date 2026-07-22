@@ -4,6 +4,21 @@ Spring Boot toolkit for validating **ISO 13616 IBAN** (national length + mod-97)
 
 Inspired by the problem space of libraries such as [jbanking](https://github.com/marcwrobel/jbanking) (Apache-2.0). This repository is an independent educational implementation under MIT.
 
+## Scope (honest)
+
+This is a learning / portfolio library, not a production compliance tool.
+
+| Capability | Status |
+|------------|--------|
+| IBAN mod-97 check | Implemented |
+| IBAN national length check (SEPA + selected countries) | Implemented |
+| BIC8 / BIC11 structural parse + validation | Implemented |
+| SEPA country flag helper | Implemented |
+| Full ISO 13616 registry for every country | Not included (documented subset only) |
+| IBAN check-digit generation | Not included |
+| BIC/bank directory lookup | Not included |
+| Persistence / stored validation history | Not included (stateless validator) |
+
 ## Architecture
 
 ```mermaid
