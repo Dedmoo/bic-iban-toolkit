@@ -25,7 +25,33 @@ public class BicIbanService {
             java.util.Map.entry("IT", 27),
             java.util.Map.entry("CH", 21),
             java.util.Map.entry("AT", 20),
-            java.util.Map.entry("BE", 16)
+            java.util.Map.entry("BE", 16),
+            java.util.Map.entry("BG", 22),
+            java.util.Map.entry("HR", 21),
+            java.util.Map.entry("CY", 28),
+            java.util.Map.entry("CZ", 24),
+            java.util.Map.entry("DK", 18),
+            java.util.Map.entry("EE", 20),
+            java.util.Map.entry("FI", 18),
+            java.util.Map.entry("GR", 27),
+            java.util.Map.entry("HU", 28),
+            java.util.Map.entry("IE", 22),
+            java.util.Map.entry("LT", 20),
+            java.util.Map.entry("LU", 20),
+            java.util.Map.entry("MT", 31),
+            java.util.Map.entry("NO", 15),
+            java.util.Map.entry("PL", 28),
+            java.util.Map.entry("PT", 25),
+            java.util.Map.entry("RO", 24),
+            java.util.Map.entry("SE", 24),
+            java.util.Map.entry("SI", 19),
+            java.util.Map.entry("SK", 24),
+            java.util.Map.entry("AL", 28),
+            java.util.Map.entry("BA", 20),
+            java.util.Map.entry("ME", 22),
+            java.util.Map.entry("MK", 19),
+            java.util.Map.entry("RS", 22),
+            java.util.Map.entry("XK", 20)
     );
 
     public record IbanResult(String iban, boolean valid, String country, boolean sepa, String message) {}
@@ -34,6 +60,9 @@ public class BicIbanService {
     public IbanResult validateIban(String raw) {
         if (raw == null || raw.isBlank()) {
             return new IbanResult("", false, null, false, "IBAN is required.");
+        }
+        if (!isSafeInput(raw) || raw.chars().anyMatch(Character::isLowerCase)) {
+            return new IbanResult("", false, null, false, "IBAN must use uppercase letters and contain no control characters.");
         }
         String iban = normalize(raw);
         if (iban.length() < 15 || iban.length() > 34) {
@@ -59,6 +88,9 @@ public class BicIbanService {
         if (raw == null || raw.isBlank()) {
             return new BicResult("", false, null, null, null, null, "BIC is required.");
         }
+        if (!isSafeInput(raw) || raw.chars().anyMatch(Character::isLowerCase)) {
+            return new BicResult("", false, null, null, null, null, "BIC must use uppercase letters and contain no control characters.");
+        }
         String bic = normalize(raw);
         if (!(bic.length() == 8 || bic.length() == 11) || !bic.matches("[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?")) {
             return new BicResult(bic, false, null, null, null, null, "BIC format is invalid.");
@@ -72,6 +104,10 @@ public class BicIbanService {
 
     private static String normalize(String value) {
         return value.replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
+    }
+
+    private static boolean isSafeInput(String value) {
+        return value.length() <= 128 && value.chars().noneMatch(Character::isISOControl);
     }
 
     private static boolean mod97Valid(String iban) {

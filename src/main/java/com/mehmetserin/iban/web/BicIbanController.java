@@ -5,6 +5,7 @@ import com.mehmetserin.iban.service.BicIbanService.BicResult;
 import com.mehmetserin.iban.service.BicIbanService.IbanResult;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class BicIbanController {
 
-    public record ValidateRequest(@NotBlank String value) {}
+    public record ValidateRequest(@NotBlank @Size(max = 128) String value) {}
 
     private final BicIbanService service;
 
@@ -40,6 +41,6 @@ public class BicIbanController {
 
     @GetMapping("/health")
     public Map<String, String> health() {
-        return Map.of("status", "healthy", "service", "bic-iban-toolkit");
+        return Map.of("status", "healthy", "service", "BicIbanToolkit");
     }
 }

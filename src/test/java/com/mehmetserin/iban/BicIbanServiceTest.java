@@ -37,4 +37,23 @@ class BicIbanServiceTest {
     void invalidBic_fails() {
         assertFalse(service.validateBic("BAD").valid());
     }
+
+    @Test
+    void officialStyleEuropeanIbanVectors_pass() {
+        assertTrue(service.validateIban("FR1420041010050500013M02606").valid());
+        assertTrue(service.validateIban("NL91ABNA0417164300").valid());
+        assertTrue(service.validateIban("TR330006100519786457841326").valid());
+    }
+
+    @Test
+    void lowercaseAndControlCharacters_areRejected() {
+        assertFalse(service.validateIban("de89370400440532013000").valid());
+        assertFalse(service.validateBic("DEUTDEFF\n").valid());
+    }
+
+    @Test
+    void bicRequiresLettersForBankAndCountryCodes() {
+        assertFalse(service.validateBic("D3UTDEFF").valid());
+        assertFalse(service.validateBic("DEUTD1FF").valid());
+    }
 }

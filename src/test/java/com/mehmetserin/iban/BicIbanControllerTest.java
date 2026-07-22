@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -26,5 +28,18 @@ class BicIbanControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.valid").value(true))
                 .andExpect(jsonPath("$.country").value("GB"));
+    }
+
+    @Test
+    void validationAndSecurityHeaders_areApplied() throws Exception {
+        mockMvc.perform(post("/api/bic/validate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"value\":\"\"}"))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get("/api/health"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("X-Content-Type-Options", "nosniff"))
+                .andExpect(header().string("X-Frame-Options", "DENY"));
     }
 }

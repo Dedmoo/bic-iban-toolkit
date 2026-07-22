@@ -38,9 +38,9 @@ flowchart LR
 
 Invalid results return HTTP 400 with the same shape and a `message` explaining length or mod-97 failure.
 
-## Domain model
+## Diagrams
 
-Class-level view of the main types and how they relate (fields, operations and dependencies).
+Architecture and UML diagrams are in [docs/architecture.md](docs/architecture.md) and [docs/uml.md](docs/uml.md). A standalone index is available at [docs/index.html](docs/index.html).
 
 ```mermaid
 classDiagram
@@ -105,7 +105,8 @@ curl -s -X POST http://localhost:8084/api/bic/validate \
 
 ## Notes
 
-- Length checks cover a common subset (DE, TR, GB, FR, NL, ES, IT, CH, AT, BE). Unknown countries still run mod-97 only.
+- Length checks cover an educational ISO 13616 subset across SEPA countries and selected Turkish neighbours. Unknown countries still run mod-97 only; consult the official ISO 13616 registry for authoritative national rules.
+- Inputs are limited to 128 characters, reject control characters and require uppercase BIC/IBAN letters. BIC bank and country codes are letters; location and branch codes are alphanumeric.
 - `GB` remains in the SEPA helper set for demo convenience; production SEPA reachability for UK accounts depends on scheme rules.
 
 ## License
